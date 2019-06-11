@@ -5,9 +5,11 @@ import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.iflytek.cloud.SynthesizerListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,6 +27,25 @@ public class MainActivity extends Activity {
 
 		SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5cfde573");
 
+	}
+
+	public void startread(View view) {
+		SpeechSynthesizer mTts = SpeechSynthesizer.createSynthesizer(MainActivity.this, null);
+		
+		// 设置返回结果格式，目前支持json,xml以及plain 三种格式，其中plain为纯听写文本内容
+		mTts.setParameter(SpeechConstant.RESULT_TYPE, "json");
+		// 此处engineType为“cloud”
+		mTts.setParameter(SpeechConstant.ENGINE_TYPE, "cloud");
+
+//		if (SpeechConstant.TYPE_LOCAL.equals("json") && SpeechConstant.MODE_MSC.equals("cloud")) {
+//			// 需下载使用对应的离线合成SDK
+//			mTts.setParameter(ResourceUtil.TTS_RES_PATH, getFilesDir().getAbsolutePath());
+//		}
+
+		mTts.setParameter(SpeechConstant.VOICE_NAME, "vixr");
+
+		final String strTextToSpeech = "窗前明月光,疑是地上霜";
+		mTts.startSpeaking(strTextToSpeech, null);
 	}
 
 	public void startui(View view) {
@@ -54,24 +75,24 @@ public class MainActivity extends Activity {
 
 		// 开始识别并设置监听器
 		mIatDialog.setListener(mRecognizerDialogListener);
-		if (mIatDialog!=null) {
+		if (mIatDialog != null) {
 			// 显示听写对话框
 			mIatDialog.show();
 		}
 	}
-	
-	private RecognizerDialogListener mRecognizerDialogListener=new RecognizerDialogListener() {
-		
+
+	private RecognizerDialogListener mRecognizerDialogListener = new RecognizerDialogListener() {
+
 		@Override
 		public void onResult(RecognizerResult result, boolean isLast) {
 			System.out.println(result.getResultString());
 			System.out.println("isLast:" + isLast);
 			Toast.makeText(MainActivity.this, result.getResultString(), 1).show();
 		}
-		
+
 		@Override
 		public void onError(SpeechError arg0) {
-			
+
 		}
 	};
 
@@ -84,7 +105,7 @@ public class MainActivity extends Activity {
 		mIat.setParameter(SpeechConstant.CLOUD_GRAMMAR, null);
 		mIat.setParameter(SpeechConstant.SUBJECT, null);
 		// 设置返回结果格式，目前支持json,xml以及plain 三种格式，其中plain为纯听写文本内容
-		mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
+		mIat.setParameter(SpeechConstant.RESULT_TYPE, "plain");
 		// 此处engineType为“cloud”
 		mIat.setParameter(SpeechConstant.ENGINE_TYPE, "cloud");
 		// 设置语音输入语言，zh_cn为简体中文

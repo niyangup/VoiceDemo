@@ -24,4 +24,13 @@
         android:onClick="startui"
         android:text="开始语音识别(出UI)" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_centerVertical="true"
+        android:onClick="startread"
+        android:text="语音合成" />
+
 </RelativeLayout>
